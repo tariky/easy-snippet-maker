@@ -1,0 +1,43 @@
+{
+    "name": "easy-snippet-maker",
+    "displayName": "Easy Snippet Maker",
+    "description": "Fastest way to create snippets in VS Code.",
+    "version": "0.0.1",
+    "publisher": "tariky",
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [{
+            "command": "extension.petMaker",
+            "title": "Create Code Snippet"
+        }],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.petMaker",
+                    "group": "g1"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "eslint": "^3.6.0",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    }
+}
