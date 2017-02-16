@@ -101,7 +101,7 @@ function activate(context) {
                                         body: buildBodyFromText(cleanCode),
                                         description: snippetObject.description
                                     }
-                                var snippetString = JSON.stringify(restoreObject);
+                                var snippetString = JSON.stringify(restoreObject, null, 2);
                                 var toSave = snippetString;
 
                                 fs.writeFile(userSnippetsFile, toSave, (err) => {
@@ -131,7 +131,7 @@ function initFile(snippObj, body, saveLocation) {
         body: buildBodyFromText(body),
         description: snippObj.description
     }
-    var snippetString = JSON.stringify(snippets);
+    var snippetString = JSON.stringify(snippets, null, 2);
     var toSave = snippetString;
 
     fs.writeFile(saveLocation, toSave, (err) => {
