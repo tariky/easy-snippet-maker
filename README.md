@@ -6,3 +6,4 @@
 
 ### Changelog:
 - 2.1.2017 - Initial Release
+- 12.3.2017 - Fixed saving snippets in Insider version, added Pretify generated JSON

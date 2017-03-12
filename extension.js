@@ -37,28 +37,16 @@ function activate(context) {
             })
             .then(() => {
 
-                var extansionPath;
-                const osName = os.type();
-                var delimiter = "/";
-                
-                switch (osName) {
-                    case ("Darwin"): {
-                        extansionPath = process.env.HOME + "/Library/Application Support/Code/User/";
-                        break;
-                    }
-                    case ("Linux"): {
-                        extansionPath = process.env.HOME + "/.config/Code/User/";
-                        break;
-                    }
-                    case ("Windows_NT"): {
-                        extansionPath = process.env.APPDATA + "\\Code\\User\\";
-                        delimiter = "\\";
-                        break;
-                    }
-                    default: {
-                        extansionPath = process.env.HOME + "/.config/Code/User/";
-                        break;
-                    }
+                let extansionPath;
+                let delimiter = "/";
+
+                let vscodeRelease = vscode.env.appName;
+
+                // Check for insider version
+                if(vscodeRelease === "Visual Studio Code - Insiders") {
+                    extansionPath = pickingRelease("Code - Insiders");
+                } else {
+                    extansionPath = pickingRelease("Code");
                 }
 
                 var userSnippetsFile = extansionPath + util.format("snippets%s.json", delimiter + snippetObject.lang);
@@ -86,7 +74,10 @@ function activate(context) {
 
                             var savedSnippets = txt.toString();
 
-                            var restoreObject = JSON.parse(savedSnippets);
+                            // Comment striping RegEx - thanks to Ryan Wheale
+                            let stripSavedSnippets = savedSnippets.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
+
+                            var restoreObject = JSON.parse(stripSavedSnippets);
 
                             if (restoreObject[snippetObject.name] !== undefined || restoreObject[snippetObject.name] === null) {
 
@@ -115,13 +106,41 @@ function activate(context) {
                 }
                    
             })
-
+            
         context.subscriptions.push(disposable);
     });
 }
 
 function buildBodyFromText(text) {
     return text.split("\n");
+}
+
+function pickingRelease(name) {
+    const osName = os.type();
+    let delimiter = "/";
+    let extansionPath;
+
+    switch (osName) {
+        case ("Darwin"): {
+            extansionPath = process.env.HOME + "/Library/Application Support/" + name + "/User/";
+            break;
+        }
+        case ("Linux"): {
+            extansionPath = process.env.HOME + "/.config/" + name + "/User/";
+            break;
+        }
+        case ("Windows_NT"): {
+            extansionPath = process.env.APPDATA + "\\" + name + "\\User\\";
+            delimiter = "\\";
+            break;
+        }
+        default: {
+            extansionPath = process.env.HOME + "/.config/" + name + "/User/";
+            break;
+        }
+    }
+
+    return extansionPath;
 }
 
 function initFile(snippObj, body, saveLocation) {
