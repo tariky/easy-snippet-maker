@@ -73,11 +73,7 @@ function activate(context) {
                             // TODO: Refactoring, code is damn mess.
 
                             var savedSnippets = txt.toString();
-
-                            // Comment striping RegEx - thanks to Ryan Wheale
-                            let stripSavedSnippets = savedSnippets.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
-
-                            var restoreObject = JSON.parse(stripSavedSnippets);
+                            var restoreObject = JSON.parse(savedSnippets);
 
                             if (restoreObject[snippetObject.name] !== undefined || restoreObject[snippetObject.name] === null) {
 
