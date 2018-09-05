@@ -44,13 +44,12 @@ function activate(context) {
 
                 // Check for insider version
                 if(vscodeRelease === "Visual Studio Code - Insiders") {
-                    extansionPath = pickingRelease("Code - Insiders");
+                    [extansionPath,delimiter] = pickingRelease("Code - Insiders");
                 } else {
-                    extansionPath = pickingRelease("Code");
+                    [extansionPath,delimiter] = pickingRelease("Code");
                 }
 
                 var userSnippetsFile = extansionPath + util.format("snippets%s.json", delimiter + snippetObject.lang);
-
                 if( snippetObject.name !== undefined && snippetObject.prefix !== undefined ) {
                     fs.readFile(userSnippetsFile, (err, txt) => {
 
@@ -60,9 +59,9 @@ function activate(context) {
 
                         if(err) {
                             fs.open(userSnippetsFile, "w+", (err, fd) => {
-                                if (err)
+                                if (err) {
                                     return;
-                                else {
+                                } else {
                                     initFile(snippetObject, cleanCode, userSnippetsFile);
                                 }
                             })
@@ -136,7 +135,7 @@ function pickingRelease(name) {
         }
     }
 
-    return extansionPath;
+    return [extansionPath,delimiter];
 }
 
 function initFile(snippObj, body, saveLocation) {
